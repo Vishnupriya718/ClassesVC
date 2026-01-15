@@ -8,26 +8,27 @@
 #include "Movie.h"
 
 using namespace std;
-
+// Function prototypes for the three main operations
 void addMedia(vector<DigitalMedia*>& db);
 void searchMedia(vector<DigitalMedia*>& db);
 void deleteMedia(vector<DigitalMedia*>& db);
 
 int main() {
-    vector<DigitalMedia*> db;
-    char command[20];
+    vector<DigitalMedia*> db;// data base for object
+    char command[20];// buffer for user commands  
 
     while (true) {
         cout << "\nEnter a command (ADD, SEARCH, DELETE, QUIT): ";
         cin >> command;
-
+	
+// Compare input to each valid command
         if (strcmp(command, "ADD") == 0) addMedia(db);
         else if (strcmp(command, "SEARCH") == 0) searchMedia(db);
         else if (strcmp(command, "DELETE") == 0) deleteMedia(db);
         else if (strcmp(command, "QUIT") == 0) break;
         else cout << "Invalid command.\n";
     }
-
+// Cleanup: delete all dynamically allocated objects before exiting
     // Cleanup
     for (auto m : db) delete m;
 
@@ -41,19 +42,20 @@ void addMedia(vector<DigitalMedia*>& db) {
 
     char title[100];
     int year;
-
+    
+// Adding a VideoGame
     if (strcmp(type, "Videogame") == 0) {
         char publisher[100], rating[50];
 
-        cin.ignore();
+        cin.ignore();// clears leftover newline so getline works
         cout << "Title: "; cin.getline(title, 100);
         cout << "Year: "; cin >> year; cin.ignore();
         cout << "Publisher: "; cin.getline(publisher, 100);
         cout << "Rating: "; cin.getline(rating, 50);
-
+// Create a new VideoGame object and store it in the vector
         db.push_back(new VideoGame(title, year, publisher, rating));
     }
-
+// Adding a Music object
     else if (strcmp(type, "Music") == 0) {
         char artist[100], publisher[100];
         int duration;
@@ -67,7 +69,7 @@ void addMedia(vector<DigitalMedia*>& db) {
 
         db.push_back(new Music(title, artist, year, duration, publisher));
     }
-
+// Adding a Movie object
     else if (strcmp(type, "Movie") == 0) {
         char director[100], rating[50];
         int duration;
@@ -93,7 +95,7 @@ void searchMedia(vector<DigitalMedia*>& db) {
         cin.ignore();
         cout << "Enter title: ";
         cin.getline(t, 100);
-
+// Loop through vector and print matches
         for (auto m : db)
             if (strcmp(m->getTitle(), t) == 0)
                 m->print();
@@ -135,7 +137,7 @@ void deleteMedia(vector<DigitalMedia*>& db) {
         int y;
         cout << "Enter year: ";
         cin >> y;
-
+// Loop through vector and remove matches
         for (int i = 0; i < db.size(); i++) {
             if (db[i]->getYear() == y) {
                 cout << "Deleting...\n";
